@@ -26,6 +26,7 @@ Use this to find unknown correctness defects in a repository, change set, or pro
   - Repeat, retry, reorder, undo, or cancel; a late completion after newer work.
   - Partial failure followed by recovery; save/reload or promised compatibility.
   - Conflicting operations or a supported dependency/configuration change.
+  - Contract-valid empty, null, or optional backend fields; incorrect or malformed responses and the specified client error handling; stale or reordered responses.
 - [ ] State the prediction or invariant and what observation would contradict it. Use existing property/stateful infrastructure when useful; do not invent idempotence or add a framework for a small audit.
 
 **Next:** choose the cheapest faithful check, preserving relevant ordering and preconditions.
@@ -34,6 +35,7 @@ Use this to find unknown correctness defects in a repository, change set, or pro
 
 - [ ] Execute against the actual implementation using targeted tests, a faithful harness, or the relevant runtime. Use isolated state for mutations. Record command/steps, revision/configuration, inputs, assertions, and output. Temporary in-project probes are allowed within authorization; see [validation guidance](validation.md) when needed.
 - [ ] Classify the result: **PASS** for exercised correct behavior, **FAIL** for the target violation, **UNRESOLVED** for setup or observation failure. A different exception is not confirmation. If execution is unavailable, continue static investigation and record the missing runtime evidence.
+- [ ] For frontend/API paths, compare the intended action with the actual request, raw response with the contract, and response data with client state and rendered output. Keep the matching exchange and reproduction state. Classify the first mismatch rather than assuming a visible UI bug originated in the frontend; use [coverage guidance](coverage.md#frontend-and-backend-data-boundaries) for the boundary checks.
 
 **Next:** passing checks return to coverage; failures become candidates. Unresolved checks need a changed approach or precise missing evidence, not endless identical retries.
 

@@ -15,6 +15,7 @@ Check a box when you have its evidence. Mark an inapplicable item **N/A** with a
 ## 2. How will we tell whether it failed?
 
 - [ ] Run or reconstruct the original steps using the actual implementation. Save the command or actions, inputs, and observed output. Preserve timing, lifecycle, and multiple callers when they matter.
+- [ ] For a frontend failure, preserve the relevant route, session/data/cache state, action order, and matching request/response. Use the [frontend reproduction and data-boundary checklist](frontend-boundary.md) when reproducing or locating the mismatch is difficult.
 - [ ] Classify the result: **FAIL** = the target failure; **PASS** = the relevant behavior exercised correctly; **UNRESOLVED** = setup or observation prevented a verdict. Another exception is not the same failure.
 - [ ] If a smaller case would help, reduce it while preserving the failure signature. Keep the original scenario for final verification.
 
@@ -23,6 +24,7 @@ Check a box when you have its evidence. Mark an inapplicable item **N/A** with a
 ## 3. Where does behavior first go wrong?
 
 - [ ] Follow the relevant input or state through callers and component boundaries. Locate the earliest supported divergence between expected and actual behavior.
+- [ ] For frontend/API behavior, check the outbound request, raw response against the contract, client transformations/state, and rendered result. Distinguish incorrect backend data, valid-but-unexpected data, and incorrect client handling; more than one boundary can be defective.
 - [ ] Compare a working input, caller, configuration, or version where useful. Check guards and assumptions around suspicious code; a recent change or suspicious line is a lead, not proof.
 
 **Keep:** A short path such as `trigger → caller → state change → incorrect result`, with evidence at the disputed boundary.

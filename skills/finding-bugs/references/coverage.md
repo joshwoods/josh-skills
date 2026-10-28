@@ -36,6 +36,14 @@ An oracle is the rule used to judge a result. It may come from an explicit examp
 
 Hypothesis describes generating sequences of actions and comparing implementations with a model. This is an optional technique, not a requirement to adopt Python or a new test framework. See its [stateful testing documentation](https://hypothesis.readthedocs.io/en/latest/stateful.html).
 
+## Frontend and backend data boundaries
+
+For a UI backed by an API, include both the user's action and the data reaching the view. Preserve the relevant route/session/cache state and match the response to the failing request. Compare `intended action → outgoing request → raw response → decoding/mapping → cache/state → view output`.
+
+Check shape and meaning: a schema-valid response can contain the wrong record, stale values, wrong units, or incomplete results. A server may correctly answer a request the client constructed incorrectly. Contract-valid empty, null, or optional fields are different from a response violating the contract; derive client fallback/error expectations from the supported behavior.
+
+Use captured responses and faithful isolated replay to test assumptions. Keep starting state and ordering comparable. A fabricated malformed fixture shows how the client reacts, not that production emits it. Record an upstream contract violation separately from a client failure to handle it as required; avoid forcing a single frontend/backend owner when both are defective. If only mock/replay checks ran, state the missing integration evidence.
+
 ## Record coverage honestly
 
 Distinguish source examined, test executed, runtime exercised, and blocked. Record the scenarios and observation points actually covered. A test file's existence is not execution evidence; a green suite is not evidence that every relevant transition was asserted.

@@ -13,6 +13,7 @@ Use the checklist as a working guide, not a fixed itinerary or a quota of experi
 
 Read supporting material only when it helps the current task:
 
+- [Frontend boundaries](references/frontend-boundary.md): reproducing UI failures and distinguishing request defects, backend data/contract problems, and client handling errors.
 - [Techniques](references/techniques.md): intermittent failures, performance, history bisection, input reduction, UI/lifecycle behavior, incidents, and human-assisted reproduction.
 - [Sources](references/sources.md): provenance, further study, or evaluation of this method.
 - [Finding Bugs](../finding-bugs/SKILL.md), if available: proactive discovery and coverage of unknown defects.
