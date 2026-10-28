@@ -1,0 +1,3 @@
+interface:
+  display_name: "Finding Bugs"
+  short_description: "Find defects with structured coverage and evidence"
