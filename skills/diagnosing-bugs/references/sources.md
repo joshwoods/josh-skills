@@ -20,6 +20,8 @@ The 2026-10-23 revision used OpenAI's [Rethinking skills and prompts for GPT-6 A
 
 ## Evaluating changes to this skill
 
+The 2026-10-28 revision made [the human-and-agent checklist](checklist.md) the canonical working procedure. The skill entrypoint now loads that procedure, so both audiences use the same decision points and evidence requirements. This changes presentation and routing; it does not establish a debugging performance improvement.
+
 Target the actual failure mode: speculative edits, repeated low-information probes, wrong nearby repairs, or premature completion. Improvement means correct causal diagnoses and repairs with preserved behavior, fewer unnecessary changes, and reasonable time/cost.
 
 Use ordinary historical bug requests where available. Freeze tasks, starting states and held-out checks before inspecting outcomes; keep the solution out of participant context. Record exact model/settings when exposed, instruction files, visible skills and actual reads, tools, hooks, permissions, environment and initial changes. The baseline includes existing guidance and must not be described as instruction-free.
