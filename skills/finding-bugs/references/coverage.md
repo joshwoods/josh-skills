@@ -8,6 +8,8 @@ For each public operation or user workflow, identify what enters, which state it
 
 For change reviews, connect modified behavior to callers and observable consequences. For product workflows, map actual actions and transitions, including prerequisites. A list of files alone does not describe workflow coverage.
 
+Use representative workflows to discover defects even when source inspection raises no suspicion. Choose checks that expose the changed outcome and the surrounding contract: inspect affected UI sections and their continued usability, save and reopen a document, or run a CLI/API through its consumer. Observe what users or consumers receive, rather than treating plausible implementation or passing lower-level tests as equivalent evidence. Keep checks proportional to the requested scope and available environment; if a workflow is not exercised, record that coverage gap. This is discovery through use; validating a particular suspected bug is a separate step.
+
 ## Select relevant dimensions
 
 These prompts are a menu. Include the dimensions that the implementation and task make plausible; explain significant omissions rather than marking unrelated categories as tested.

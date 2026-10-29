@@ -13,6 +13,8 @@ Checklists and a decision flow for humans and LLMs to find, explain, and fix sof
 
 Start at the first unanswered question. Check boxes against actual evidence; mark inapplicable or blocked items explicitly. A small bug may need one experiment. A broader hunt needs a coverage record so finding one bug does not silently end the rest of the work.
 
+To discover unknown bugs, exercise representative workflows in scope even when source inspection finds no candidate. Observe the changed outcome and the surrounding behavior users or consumers depend on; record a coverage gap if that workflow was not exercised. Validating a suspected defect comes after discovery, whether the lead arose from source, tests, or actual use.
+
 Prefer reproducing a failure through actual use first: the affected UI, CLI, or API workflow in a representative environment, manually or through automation. If unavailable or a reasonable attempt does not reproduce it, use a faithful test against the real implementation as the fallback. Record **actual use**, **test only**, or **not yet reproduced** separately from each check's PASS/FAIL/UNRESOLVED result. Verify a repair against the reproduction and retry the actual workflow when available; test-only evidence does not establish end-to-end verification.
 
 ## Work from quick checks to expensive investigations
@@ -21,7 +23,7 @@ Both checklists use this default order. Choose checks that can answer the curren
 
 | Effort | Diagnosing a known failure | Finding unknown bugs |
 | --- | --- | --- |
-| Quick | Confirm basics, try the reported steps, inspect existing errors/data | Define scope, inspect relevant behavior, run available targeted checks |
+| Quick | Confirm basics, try the reported steps, inspect existing errors/data | Define scope, exercise representative workflows, inspect available evidence |
 | Focused | Trace the mismatch, inspect a relevant diff, test an explanation | Challenge candidates with concrete boundary or sequence checks |
 | More involved | Add targeted probes or a faithful harness; compare code/context | Exercise integration, failure recovery, or stateful behavior where needed |
 | Expensive | Reconstruct environments, run prolonged trials, rebuild historical versions or bisect | Run justified extended stress/property searches or version/configuration comparisons |
@@ -34,7 +36,7 @@ Stop escalating when the evidence supports the next decision. A requested fix st
 flowchart TD
     A{"Known failure?"}
     A -->|Yes| D["Define expected vs actual behavior"]
-    A -->|No| S["Map scope; check the next scenario"]
+    A -->|No| S["Map scope; exercise representative workflows"]
     S -->|Candidate defect| D
     S -->|No candidate| M{"Other planned areas remain?"}
     D --> E["Reproduce or collect available evidence"]
@@ -67,10 +69,10 @@ Each skill folder includes its checklist, supporting references, and agent metad
 
 ## Install in Codex
 
-On another machine, sign in to GitHub with an account that can access this repository (`gh auth login`), then clone it:
+Clone the public repository on another machine:
 
 ```sh
-gh repo clone joshwoods/josh-skills
+git clone https://github.com/joshwoods/josh-skills.git
 cd josh-skills
 ```
 
