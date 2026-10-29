@@ -9,6 +9,8 @@ Read and follow [the diagnosis and repair checklist](references/checklist.md). I
 
 Use the request and prior context to decide whether completion means diagnosis, mitigation, or a verified repair. When asked to fix or resolve the problem, continue through implementation and verification. For explicitly diagnosis-only work, deliver the explanation and repair direction without product edits.
 
+Prefer reproduction through actual use first; use a faithful test as the fallback when the affected workflow is unavailable or a reasonable attempt does not reproduce it. Keep actual-use, test-only, and not-yet-reproduced evidence distinct, including when verifying a repair.
+
 Follow its low-to-high effort investigation order: quick triage and reproduction, existing evidence and focused history, targeted experiments, then expensive escalation such as historical rebuilds or bisect. Skip remaining investigation once the cause is sufficiently supported. Choose relevant checks; do not exhaust cheaper but unrelated techniques or skip required verification. Keep longer investigations recorded so probes and speculative patches do not repeat. Preserve PASS, FAIL, and UNRESOLVED distinctions. A blocked runtime check does not prevent useful static investigation and does not justify claiming a verified repair.
 
 Read supporting material only when it helps the current task:

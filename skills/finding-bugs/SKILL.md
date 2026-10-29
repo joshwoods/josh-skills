@@ -7,6 +7,8 @@ description: Find and validate correctness defects in a requested code or produc
 
 Read and follow the [bug discovery checklist](references/checklist.md). It is the shared playbook for humans and agents: define coverage, start with quick relevant checks, validate leads, escalate unresolved work, and complete authorized repairs and remaining coverage.
 
+When reproducing a candidate defect, prefer actual use first; use a faithful test as the fallback when the affected workflow is unavailable or a reasonable attempt does not reproduce it. Keep actual-use, test-only, and not-yet-reproduced evidence distinct, including when verifying a repair.
+
 Choose the lowest-effort check that can answer the current question. Normally progress from existing evidence and focused checks to targeted sequences or replay, then expensive environment, stress, property, or history investigations only when warranted. This is an effort ladder, not a requirement to try every technique: unrelated cheap checks add no value, and low cost does not excuse weak validation or incomplete exhaustive coverage. A supported cause can proceed directly to authorized repair and verification.
 
 Preserve the user's scope and existing work. An audit permits investigation and reversible probes within its constraints; retain product fixes or permanent test changes only when authorized. When asked to find and fix bugs, continue through repair, verification, and remaining coverage without waiting for another instruction.

@@ -13,6 +13,8 @@ Checklists and a decision flow for humans and LLMs to find, explain, and fix sof
 
 Start at the first unanswered question. Check boxes against actual evidence; mark inapplicable or blocked items explicitly. A small bug may need one experiment. A broader hunt needs a coverage record so finding one bug does not silently end the rest of the work.
 
+Prefer reproducing a failure through actual use first: the affected UI, CLI, or API workflow in a representative environment, manually or through automation. If unavailable or a reasonable attempt does not reproduce it, use a faithful test against the real implementation as the fallback. Record **actual use**, **test only**, or **not yet reproduced** separately from each check's PASS/FAIL/UNRESOLVED result. Verify a repair against the reproduction and retry the actual workflow when available; test-only evidence does not establish end-to-end verification.
+
 ## Work from quick checks to expensive investigations
 
 Both checklists use this default order. Choose checks that can answer the current question; the list is not a quota to finish.

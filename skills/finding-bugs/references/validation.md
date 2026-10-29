@@ -16,6 +16,8 @@ If the expected behavior is disputed, isolate the ambiguity. Do not hide a produ
 
 Choose a probe that could disprove the candidate. State the expected failure and an observation that would rule it out before execution. Exercise the actual implementation rather than a handwritten copy of the suspect logic.
 
+Prefer reproducing through the affected application workflow in a representative environment first. If unavailable or a reasonable attempt does not reproduce it, use the smallest faithful test as a fallback. Reuse existing evidence and fixtures; this preference does not require prolonged runtime setup or repeated attempts before useful test or static investigation. Distinguish actual-use reproduction from test-only reproduction and from a concern not yet reproduced. Automation of the representative workflow can establish actual-use evidence; isolated tests and substituted boundaries establish only what they exercise.
+
 For an audit, choose existing checks, an external harness, a disposable checkout, or a narrowly scoped reversible test/instrumentation probe according to which can faithfully reach the behavior. A native test target or private compiled boundary may require a temporary in-project probe. Honor explicit read-only or no-edit instructions. Record the starting state, preserve user edits, and remove only your probe changes afterward. If repairs are also authorized, retain the intended repair and useful regression checks; probe cleanup must not undo that work.
 
 Use supported entry points and isolated state. A mock can control a boundary, but a defect in the mock is not evidence against production behavior. Preserve enough context to show that the artificial response or schedule is supported by the real dependency.

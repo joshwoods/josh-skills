@@ -2,6 +2,8 @@
 
 Use this when a visible UI failure might come from the request, backend data, or client handling. The task is to find the first supported mismatch in the data path, rather than assigning ownership from the screen alone.
 
+Prefer reproducing the affected interaction in the actual application first, manually or through automation in a representative environment. If it is unavailable or a reasonable attempt does not reproduce the failure, use a faithful test or captured-data replay as the fallback. Record whether the failure was reproduced in actual use, only in a test, or not yet reproduced; preserve relevant evidence and continue investigation if neither route reproduces it.
+
 ## 1. Preserve a useful reproduction
 
 - [ ] Record the route, action order, relevant build/configuration, account or permissions, input records, and starting client/cache state. Include browser/device, flags, or timing only where relevant. Distinguish a fresh load from navigation through an existing session.
@@ -30,13 +32,13 @@ Use the first observed mismatch to choose the next investigation:
 
 ## 3. Run a discriminating experiment
 
-- [ ] Replay the captured response through the real client handling path in an isolated fixture, preserving relevant state and ordering. Compare with a known-correct response under the same conditions. Keep other relevant variables fixed.
+- [ ] When a replay can resolve a remaining question or provide relevant regression coverage, replay the captured response through the real client handling path in an isolated fixture, preserving relevant state and ordering. Compare with a known-correct response under the same conditions. Keep other relevant variables fixed; a decisive actual-use reproduction does not require an additional replay fixture.
 - [ ] If replay reproduces the failure, it shows that data and client handling can produce the symptom; it does not by itself assign fault. If replay does not fail, investigate missing context such as cache state, race/order, auth, or integration behavior. A fabricated malformed payload tests handling, not whether the backend actually emits that payload.
 
 ## 4. Verify at the boundary that failed
 
 - [ ] Fix the demonstrated cause. Do not make every unexpected value silently become a default merely to hide a broken contract; determine the required fallback or error behavior.
 - [ ] Validate each claimed defect independently. If extra client defenses are desirable but not required by the supported behavior, label them a robustness recommendation rather than an established second bug.
-- [ ] Recheck the original interaction with the actual integration, the relevant captured-data regression, and contract-valid edge cases. If error handling changed, check the relevant malformed/error case too. A mocked response alone does not verify the end-to-end repair.
+- [ ] Recheck the original interaction with the actual integration, the relevant captured-data regression, and contract-valid edge cases. If error handling changed, check the relevant malformed/error case too. If the actual interaction is unavailable, report the test-level result and remaining integration gap, and retry the interaction when available. A mocked response alone does not verify the end-to-end repair.
 
 Return to the [main checklist](checklist.md) to record the outcome, clean up probes, and complete the remaining scope.

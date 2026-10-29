@@ -17,9 +17,11 @@ Check a box when you have its evidence. Mark an inapplicable item **N/A** with a
 
 ## 2. Quick attempt: can we reproduce it?
 
-- [ ] Try the simplest faithful check already available: the reported UI steps, a failing test, or a direct CLI/API call. Save the invocation, inputs, and result. Preserve timing, lifecycle, and multiple callers when they matter; do not replace the trigger merely to get a cheaper test.
+- [ ] Prefer reproducing through actual use first: follow the affected UI, CLI, or API workflow in a representative environment, with the relevant version, configuration, data, state, and action order. Automation can drive this workflow; manual interaction or production access is not required. Use isolated state for mutations within the task's authorization. Save the steps, inputs, and result; preserve timing, lifecycle, and multiple callers when they matter.
 - [ ] For a frontend failure, preserve the relevant route, session/data/cache state, action order, and matching request/response. Use the [frontend reproduction and data-boundary checklist](frontend-boundary.md) when reproducing or locating the mismatch is difficult.
+- [ ] If that workflow is unavailable or a reasonable attempt does not reproduce the failure, reuse, adapt, or build the smallest faithful test that can expose the same failure in the real implementation. Use available evidence to preserve reachable inputs, state, and ordering; an impossible setup, copied implementation, or unrelated exception does not reproduce the reported bug. Reuse existing fixtures before building a harness, and do not repeat uninformative real-use attempts indefinitely.
 - [ ] Classify the result: **FAIL** = the target failure; **PASS** = the relevant behavior exercised correctly; **UNRESOLVED** = setup or observation prevented a verdict. Another exception is not the same failure.
+- [ ] Separately record the reproduction evidence: **actual use**, **test only**, or **not yet reproduced**, with the conditions and observer/source. A test driving the representative application workflow can count as actual use; an isolated test or substituted integration boundary cannot establish that the full workflow failed. Preserve useful existing reproduction evidence instead of repeating it solely to satisfy the sequence.
 - [ ] Simplify the case if it is quick and preserves the failure signature. Keep the original scenario; defer building a new harness or extensive reduction until cheaper checks leave a question it can answer.
 
 **Next:** If the failure occurs, go to step 3. If it does not, inspect available logs, traces, dumps, history, or static evidence; provisional explanations can help build a reproduction. For intermittent failures, record failures/trials and conditions. If remaining progress needs unavailable evidence, record the missing item and next decisive check in step 8; continue independent work.
@@ -74,7 +76,7 @@ Actual cost depends on existing tooling; a ready-made decisive check can move ea
 
 ## 7. Does the repair hold up?
 
-- [ ] Exercise the original scenario and relevant reduced check after the change. For intermittent or performance failures, compare equivalent conditions and report trials or measurements and their limits.
+- [ ] Exercise the original scenario and relevant reduced check after the change. If only a fallback test can run, verify against it and report test-level verification with the actual-use gap; retry the actual workflow when available. Do not claim end-to-end verification from an isolated test. For intermittent or performance failures, compare equivalent conditions and report trials or measurements and their limits.
 - [ ] Check risk-relevant neighboring behavior and complete required project checks. Use runtime evidence for claims about actual UI interaction or end-to-end behavior.
 - [ ] Where existing state was affected, verify recovery from that state as well as behavior with fresh state. A passing clean install does not establish that existing users have recovered.
 - [ ] Verify final conditions with temporary instrumentation removed wherever removal can change behavior, especially timing.
