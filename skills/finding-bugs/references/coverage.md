@@ -19,7 +19,7 @@ These prompts are a menu. Include the dimensions that the implementation and tas
 | State and sequences | What happens after retry, repeat, undo, back, reset, or a different order of valid actions? | Relevant action sequence and final state, not only individual method results. |
 | Failures and recovery | What happens when an operation fails partway through? Can the user retry? | Propagated error, retained state, and subsequent successful or failed operation. |
 | Cancellation and lifetime | What work survives cancellation or view/process disposal? Can a late result overwrite newer state? | Ownership and completion order, with observed state where feasible. |
-| Persistence and interchange | Does save/load preserve the required meaning? Can previous or external data be read as promised? | Round trip or compatibility check invoking the real serialization/storage boundary. |
+| Persistence and interchange | Does save/load preserve the required meaning? Can previous or external data be read as promised? Does an upgrade or repair work with existing affected state? | Round trip, compatibility, or recovery check invoking the real storage boundary; distinguish fresh fixtures from preexisting data. |
 | Concurrency and ordering | Can independently valid operations conflict, duplicate effects, or commit stale results? | Reachable interleaving and invariant violated at the relevant observation point. |
 | Environment and dependencies | Which configurations, versions, permissions, or external outcomes affect the contract? | Observed or supported configuration plus dependency behavior. |
 

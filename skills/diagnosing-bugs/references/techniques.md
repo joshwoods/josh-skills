@@ -14,9 +14,7 @@ Define the symptom quantitatively: operation, input/workload, baseline, metric a
 
 ## Regressions with history
 
-With known good and bad states and a reliable classifier, consider `git bisect` or differential execution. Separate build/environment failures from the target behavior. For `git bisect run`, exit 0 is good, an appropriate nonzero exit is bad, and 125 skips an untestable revision; inspect the command's own exit behavior before automating it. Preserve the user's checkout and changes by using an appropriate isolated checkout when needed.
-
-Confirm the candidate boundary in comparable conditions. A first bad commit narrows where to investigate; it is not by itself a causal explanation. Skipped revisions, dependencies and unrelated failures can leave an ambiguous result. Official reference: <https://git-scm.com/docs/git-bisect>.
+Use the [regression history checklist](regression-history.md) when a last-known-good version or release window can narrow the investigation. It covers establishing endpoints, mapping app/deployment versions to commits, comparing code and context, reviewing history, manual or automated bisect, and confirming the resulting boundary. Use it alongside current-path diagnosis; a first bad commit does not by itself explain the mechanism or verify a repair.
 
 ## Large inputs or change sets
 

@@ -5,9 +5,11 @@ description: Find and validate correctness defects in a requested code or produc
 
 # Finding Bugs
 
-Read and follow the [bug discovery checklist](references/checklist.md). It is the shared playbook for humans and agents: define coverage, choose meaningful scenarios, validate candidates, complete authorized repairs, and account for the remaining scope.
+Read and follow the [bug discovery checklist](references/checklist.md). It is the shared playbook for humans and agents: define coverage, start with quick relevant checks, validate leads, escalate unresolved work, and complete authorized repairs and remaining coverage.
 
-Use the checklist as an investigation loop, not a requirement to try every technique. Preserve the user's scope and existing work. An audit permits investigation and reversible probes within its constraints; retain product fixes or permanent test changes only when authorized. When asked to find and fix bugs, continue through repair, verification, and remaining coverage without waiting for another instruction.
+Choose the lowest-effort check that can answer the current question. Normally progress from existing evidence and focused checks to targeted sequences or replay, then expensive environment, stress, property, or history investigations only when warranted. This is an effort ladder, not a requirement to try every technique: unrelated cheap checks add no value, and low cost does not excuse weak validation or incomplete exhaustive coverage. A supported cause can proceed directly to authorized repair and verification.
+
+Preserve the user's scope and existing work. An audit permits investigation and reversible probes within its constraints; retain product fixes or permanent test changes only when authorized. When asked to find and fix bugs, continue through repair, verification, and remaining coverage without waiting for another instruction.
 
 For a reported failure or deeper diagnosis of a discovered defect, the [diagnosis and repair checklist](../diagnosing-bugs/references/checklist.md) is available when that sibling skill is installed. The discovery checklist includes a local repair path, so this skill also works independently.
 
