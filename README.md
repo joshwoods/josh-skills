@@ -1,8 +1,21 @@
-# Josh’s Bug Playbook
+# Josh’s Skills
+
+Reusable skills for bug investigation and evidence-backed research, with local references for use by humans and LLMs.
+
+## Skills
+
+| Skill | Purpose |
+| --- | --- |
+| [Diagnosing Bugs](skills/diagnosing-bugs/SKILL.md) | Diagnose reported failures and carry requested repairs through verification. |
+| [Finding Bugs](skills/finding-bugs/SKILL.md) | Discover correctness defects through source inspection and representative workflow use. |
+| [Heavy-Duty Research](skills/heavy-duty-research/SKILL.md) | Detailed research workflow with source evaluation, synthesis, and a pack of research-method references. |
+| [Heavy-Duty Research Lean](skills/heavy-duty-research-lean/SKILL.md) | A more compact research workflow with conditional loading of a consolidated methodology checklist. |
+
+Each folder is installable on its own. The research variants are alternatives; choose the one that fits how much methodology guidance you want loaded.
+
+## Bug playbook
 
 Checklists and a decision flow for humans and LLMs to find, explain, and fix software bugs. Each checklist says what to do, what evidence to keep, and which step comes next.
-
-## Start here
 
 | Checklist | Use it when |
 | --- | --- |
@@ -63,9 +76,9 @@ Copy the relevant checklist into your issue or working notes. A short instructio
 
 > Follow the linked checklist for this task. Record evidence beside completed steps and explain any blocked or inapplicable items. Continue through the requested scope, including repair and verification when asked.
 
-The checklists are the method. The installable skills below are small adapters that load those same documents for a coding agent.
+The bug checklists are the method. Their installable skills are small adapters that load those same documents for a coding agent.
 
-Each skill folder includes its checklist, supporting references, and agent metadata. Diagnosing Bugs also includes an optional human-assisted reproduction template.
+Each skill folder includes a `SKILL.md` and its local references. The bug skills also include agent metadata, and Diagnosing Bugs includes an optional human-assisted reproduction template.
 
 ## Install in Codex
 
@@ -76,25 +89,27 @@ git clone https://github.com/joshwoods/josh-skills.git
 cd josh-skills
 ```
 
-Copy both skill folders into your Codex skills directory. Back up any existing copies before replacing them.
+Copy the skill folders you want into your Codex skills directory. Back up any existing copies before replacing them. To install all four:
 
 ```sh
 skill_destination="${CODEX_HOME:-$HOME/.codex}/skills"
 mkdir -p "$skill_destination"
-cp -R skills/diagnosing-bugs skills/finding-bugs "$skill_destination/"
+cp -R skills/diagnosing-bugs skills/finding-bugs skills/heavy-duty-research skills/heavy-duty-research-lean "$skill_destination/"
 ```
 
-In a new session, invoke `$diagnosing-bugs` for a known failure or `$finding-bugs` for a proactive review. For example:
+In a new session, invoke the skill by name. For example:
 
 - “Use $diagnosing-bugs to investigate and fix this crash: …”
 - “Use $finding-bugs to review the import workflow for correctness defects.”
+- “Use $heavy-duty-research to investigate this question and produce an evidence-backed brief: …”
+- “Use $heavy-duty-research-lean to compare these options, including source quality and uncertainties: …”
 
 ## Use with other agents
 
-Copy the complete folders into the agent’s supported skill location, or provide the relevant `SKILL.md` and its linked references as task context. Keep both folders as siblings so their cross-references continue to work. Adapt installation to the receiving tool; the methods do not require a particular model.
+Copy the complete folders into the agent’s supported skill location, or provide the relevant `SKILL.md` and its linked references as task context. If installing both bug skills, keep them as siblings so their optional cross-references work. Adapt installation to the receiving tool; the methods do not require a particular model.
 
 ## Sources and validation
 
 Research sources and limitations are recorded in [diagnosis sources](skills/diagnosing-bugs/references/sources.md) and [discovery provenance](skills/finding-bugs/references/provenance.md).
 
-The instructions were revised using OpenAI’s [GPT-6 Astra skill guidance](https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra). Format checks and editorial review do not establish improved debugging performance; effectiveness requires evaluation on representative tasks.
+The bug instructions were revised using OpenAI’s [GPT-6 Astra skill guidance](https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra). Format checks and editorial review do not establish improved task performance; effectiveness requires evaluation on representative tasks.
