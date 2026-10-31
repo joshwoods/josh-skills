@@ -2,7 +2,7 @@
 
 Use this when a visible UI failure might come from the request, backend data, or client handling. The task is to find the first supported mismatch in the data path, rather than assigning ownership from the screen alone.
 
-Prefer reproducing the affected interaction in the actual application first, manually or through automation in a representative environment. If it is unavailable or a reasonable attempt does not reproduce the failure, use a faithful test or captured-data replay as the fallback. Record whether the failure was reproduced in actual use, only in a test, or not yet reproduced; preserve relevant evidence and continue investigation if neither route reproduces it.
+Prefer reproducing the affected interaction in the actual application first, manually or through automation in a representative environment. If it is unavailable or a reasonable attempt does not reproduce the failure, reuse a cheap faithful check or inspect available request/response evidence through steps 1–2 before choosing a targeted test or captured-data replay in step 3. Defer substantial new harness setup until cheaper relevant checks leave a question it can answer. Record whether the failure was reproduced in actual use, only in a test, or not yet reproduced; preserve relevant evidence and continue investigation if neither route reproduces it.
 
 ## 1. Preserve a useful reproduction
 
@@ -37,6 +37,8 @@ Use the first observed mismatch to choose the next investigation:
 - [ ] If replay reproduces the failure, it shows that data and client handling can produce the symptom; it does not by itself assign fault. If replay does not fail, investigate missing context such as cache state, race/order, auth, or integration behavior. A fabricated malformed payload tests handling, not whether the backend actually emits that payload.
 
 ## 4. Verify at the boundary that failed
+
+For diagnosis-only work, return to the [main checklist](checklist.md) with the supported explanation and repair direction. When repair is requested, continue below.
 
 - [ ] Fix the demonstrated cause. Do not make every unexpected value silently become a default merely to hide a broken contract; determine the required fallback or error behavior.
 - [ ] Validate each claimed defect independently. If extra client defenses are desirable but not required by the supported behavior, label them a robustness recommendation rather than an established second bug.

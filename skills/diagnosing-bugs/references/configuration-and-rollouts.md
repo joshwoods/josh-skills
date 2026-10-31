@@ -12,6 +12,12 @@ For materially different reports, keep a compact row with relevant facts:
 
 Similar output can arise from different causes. A report before activation, from an unaffected population, or with a distinct override challenges an explanation based only on the rollout. It does not automatically disprove that explanation for other reports. Preserve unknowns and use only the identity detail needed to distinguish cases; do not copy sensitive identifiers into shared writeups unnecessarily.
 
+## Collect supplied correlation evidence
+
+Use supplied request/trace IDs through supported sources early. An empty result means that lookup returned no evidence under its source, time range, and filters; it does not establish that the request has no useful logs. Where available and authorized, check correlated logs or request records before asking for information they may already contain.
+
+Use the returned identity, effective configuration, producer, and output to guide the focused tracing below; leave unavailable fields unknown.
+
 ## Resolve the decision's origin and consumer
 
 - Identify the authoritative configuration system, namespace, configuration type, deployment scope, and effective revision. A not-found lookup in one system does not prove deletion or non-use. A repository configuration file is not necessarily the deployed configuration.
@@ -22,9 +28,7 @@ Similar output can arise from different causes. A report before activation, from
 
 Prefer the affected actual workflow for evidence. If it is unavailable, a faithful check at the consumer boundary can distinguish the suspected paths. A test asserting that a lookup was skipped or a fallback value was returned establishes that mechanism, not preservation of the consumer's output or side effects. Label static conclusions and unexercised boundaries explicitly.
 
-## Correlate observations without confusing them with causes
-
-Use supplied request/trace IDs through supported sources early. An empty result means that lookup returned no evidence under its source, time range, and filters; it does not establish that the request has no useful logs. Where available and authorized, check correlated logs or request records before asking for information they may already contain.
+## Interpret correlated observations
 
 For each potentially relevant exception, follow the catch/fallback/retry behavior to the disputed output. An error that is handled without changing that decision can be a separate problem; its presence in the same trace is not proof it caused this symptom.
 

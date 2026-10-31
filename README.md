@@ -25,19 +25,19 @@ Checklists and a decision flow for humans and LLMs to find, explain, and fix sof
 | [Trace a regression through versions and review history](skills/diagnosing-bugs/references/regression-history.md) | Prior changes or review warnings may explain a failure, or you need to narrow its introduction with Git history and bisect. |
 | [Diagnose configuration decisions and rollouts](skills/diagnosing-bugs/references/configuration-and-rollouts.md) | Defaults, overrides, migration routing, or rollback may explain differing reports or consumer-visible behavior. |
 
-Start at the first unanswered question. Check boxes against actual evidence; mark inapplicable or blocked items explicitly. A small bug may need one experiment. A broader hunt needs a coverage record so finding one bug does not silently end the rest of the work.
+Handle ongoing harm and fragile evidence first: preserve what is practical before state-changing actions, perform authorized urgent mitigation when needed, and verify recovery. Then start at the first unanswered question. Check boxes against actual evidence; mark inapplicable or blocked items explicitly. A small bug may need one experiment. A broader hunt needs a coverage record so finding one bug does not silently end the rest of the work.
 
 To discover unknown bugs, exercise representative workflows in scope even when source inspection finds no candidate. Observe the changed outcome and the surrounding behavior users or consumers depend on; record a coverage gap if that workflow was not exercised. Validating a suspected defect comes after discovery, whether the lead arose from source, tests, or actual use.
 
-Prefer reproducing a failure through actual use first: the affected UI, CLI, or API workflow in a representative environment, manually or through automation. If unavailable or a reasonable attempt does not reproduce it, use a faithful test against the real implementation as the fallback. Record **actual use**, **test only**, or **not yet reproduced** separately from each check's PASS/FAIL/UNRESOLVED result. Verify a repair against the reproduction and retry the actual workflow when available; test-only evidence does not establish end-to-end verification.
+Prefer reproducing a failure through actual use first: the affected UI, CLI, or API workflow in a representative environment, manually or through automation. If unavailable or a reasonable attempt does not reproduce it, use a faithful test against the real implementation as the fallback. Reuse cheap existing checks first; inspect available logs, matching exchanges, source, and focused history before investing in a new test or harness. Record **actual use**, **test only**, or **not yet reproduced** separately from each check's PASS/FAIL/UNRESOLVED result. Verify a repair against the reproduction and retry the actual workflow when available; test-only evidence does not establish end-to-end verification.
 
 ## Work from quick checks to expensive investigations
 
-Both checklists use this default order. Choose checks that can answer the current question; the list is not a quota to finish.
+After time-sensitive actions, both checklists use this default order. Choose checks that can answer the current question; the list is not a quota to finish.
 
 | Effort | Diagnosing a known failure | Finding unknown bugs |
 | --- | --- | --- |
-| Quick | Confirm basics, try the reported steps, inspect existing errors/data | Define scope, exercise representative workflows, inspect available evidence |
+| Quick | Confirm basics, try the reported steps, inspect existing errors/data and cheap existing checks | Define scope and coverage, exercise representative workflows, inspect available source/history clues |
 | Focused | Trace the mismatch, inspect a relevant diff, test an explanation | Challenge candidates with concrete boundary or sequence checks |
 | More involved | Add targeted probes or a faithful harness; compare code/context | Exercise integration, failure recovery, or stateful behavior where needed |
 | Expensive | Reconstruct environments, run prolonged trials, rebuild historical versions or bisect | Run justified extended stress/property searches or version/configuration comparisons |
@@ -49,18 +49,23 @@ Stop escalating when the evidence supports the next decision. A requested fix st
 ```mermaid
 flowchart TD
     A{"Known failure?"}
-    A -->|Yes| D["Define expected vs actual behavior"]
-    A -->|No| S["Map scope; exercise representative workflows"]
-    S -->|Candidate defect| D
-    S -->|No candidate| M{"Other planned areas remain?"}
-    D --> E["Reproduce or collect available evidence"]
-    E --> H["Trace the path; test explanations"]
-    H -->|Useful next experiment| E
+    A -->|Yes| I["Assess impact; preserve available failing evidence"]
+    I --> U{"Urgent mitigation needed?"}
+    U -->|Yes| T["Perform authorized mitigation; verify recovery and record remaining damage"]
+    U -->|No| D["Define expected vs actual behavior"]
+    T --> D
+    A -->|No| S["Map scope; exercise representative workflows with focused source/history checks"]
+    S -->|Candidate defect| I
+    S -->|No candidate| M{"Planned checks or scenarios remain?"}
+    D --> E["Quick actual-use attempt and available evidence; reuse cheap existing checks"]
+    E --> H["Localize the mismatch; assess explanations"]
+    H -->|Useful next experiment| X["Run a targeted check; escalate cost only as needed"]
+    X --> H
     H -->|Cause supported| F{"Fix included in the task?"}
-    H -->|Candidate disproved or evidence blocked| O["Record outcome and evidence limits"]
+    H -->|Defect claim disproved or no useful next check| O["Record outcome and evidence limits"]
     F -->|No| O
-    F -->|Yes| R["Repair; verify the original failure"]
-    R -->|Failure or regression| E
+    F -->|Yes| R["Repair; verify original behavior and affected existing state"]
+    R -->|Failure or regression| I
     R -->|Checks pass: verified| O
     R -->|Unavailable or inconclusive: unverified| O
     O --> M
@@ -69,7 +74,7 @@ flowchart TD
     M -->|No| Z["Report findings, changes, and coverage"]
 ```
 
-The detailed checklists distinguish a failed check from a setup failure, a supported diagnosis from a hypothesis, and a verified repair from a workaround. During an incident, authorized mitigation can come first; preserve evidence and resume diagnosis afterward. When no useful next check is possible, record the blocker and continue independent work within scope.
+The detailed checklists distinguish a failed check from a setup failure, a supported diagnosis from a hypothesis, and a verified repair from a workaround. During an incident, capture what is practical without delaying necessary authorized recovery; mitigation does not require a fresh reproduction or complete diagnosis. Verify recovery separately from explaining the cause, and continue diagnosis within scope. When no useful next check is possible, record the blocker and continue independent work within scope.
 
 ## Use with a human or an LLM
 

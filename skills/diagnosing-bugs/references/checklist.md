@@ -1,10 +1,17 @@
 # Diagnose and fix a bug
 
-Use this checklist when there is a specific failure or performance regression to explain. A human or an LLM can keep the same working record. Investigation is ordered from quick checks to more costly work: basic facts → simple reproduction → existing evidence and focused history → targeted experiments → expensive escalation. Start with the first unanswered question; use only checks relevant to the failure. A clear cause lets you skip remaining investigation and move to the requested repair or report.
+Use this checklist when there is a specific failure or performance regression to explain. A human or an LLM can keep the same working record. Handle urgency and fragile evidence first. Ordinary investigation then progresses from quick checks to more costly work: basic facts → simple reproduction and available evidence → focused history and targeted experiments → expensive escalation. Start with the first unanswered question; use only checks relevant to the failure. A clear cause lets you skip remaining investigation and move to the requested repair or report.
 
 The order is a default, not a requirement to try every cheaper technique. Follow evidence when a particular check is clearly decisive. Required verification still applies even when it is expensive.
 
 Check a box when you have its evidence. Mark an inapplicable item **N/A** with a short reason; record blocked work explicitly. Writing a plausible explanation is not completion of an experiment.
+
+## First: preserve evidence and handle urgency
+
+Apply this at entry and whenever a live failure appears. Time-sensitive recovery and evidence come before the ordinary effort ladder; collect only what the immediate decision needs.
+
+- [ ] Preserve an existing failing state before refreshing, restarting, reinstalling, signing out, clearing caches, resetting data, or repeating steps that may overwrite the failing state or evidence. Capture relevant available observations, logs, request/response evidence, versions/configuration, and state/identity details first; use the [evidence-preservation guidance](techniques.md#preserve-failing-state-before-resetting-it). Keep the failing instance or a safe snapshot when feasible and compare against a separate fresh instance. If urgent authorized mitigation cannot wait, capture what is practical and record the evidence lost. A symptom disappearing after reset is not proof of the cause or a verified repair.
+- [ ] Assess ongoing impact and whether urgent mitigation is needed. When it is, perform authorized mitigation without waiting for a fresh reproduction or complete diagnosis, then check recovery in the affected workflow and population. Check whether incorrect data, retained state, or queued effects need further containment or recovery; restored service does not establish that prior damage is repaired. Record what changed, the observed recovery, and remaining uncertainty; continue diagnosis within the requested scope.
 
 ## 1. Quick triage: what is wrong?
 
@@ -14,14 +21,13 @@ Check a box when you have its evidence. Mark an inapplicable item **N/A** with a
 - [ ] If this previously worked, record readily available last-observed-good and first-observed-bad version facts and their evidence. Leave missing identities as unknown for now; do not begin rebuilding old releases before trying a simple reproduction. First detection is not necessarily introduction.
 - [ ] Establish the intended outcome from the task: diagnosis, mitigation, or a verified repair. A request to fix the problem includes carrying the repair through verification.
 
-**Next:** If expected behavior is unclear, resolve that ambiguity while investigating what you can. During an incident, perform authorized mitigation and preserve evidence; restored service does not by itself explain the cause.
+**Next:** If expected behavior is unclear, resolve that ambiguity while investigating what you can.
 
 ## 2. Quick attempt: can we reproduce it?
 
-- [ ] Preserve an existing failing state before refreshing, restarting, reinstalling, signing out, clearing caches, resetting data, or repeating steps that may overwrite the failing state or evidence. Capture relevant available observations, logs, request/response evidence, versions/configuration, and state/identity details first; use the [evidence-preservation guidance](techniques.md#preserve-failing-state-before-resetting-it). Keep the failing instance or a safe snapshot when feasible and compare against a separate fresh instance. If urgent authorized mitigation cannot wait, capture what is practical and record the evidence lost. A symptom disappearing after reset is not proof of the cause or a verified repair.
 - [ ] Prefer reproducing through actual use first: follow the affected UI, CLI, or API workflow in a representative environment, with the relevant version, configuration, data, state, and action order. Automation can drive this workflow; manual interaction or production access is not required. Use isolated state for mutations within the task's authorization. Save the steps, inputs, and result; preserve timing, lifecycle, and multiple callers when they matter.
 - [ ] For a frontend failure, preserve the relevant route, session/data/cache state, action order, and matching request/response. Use the [frontend reproduction and data-boundary checklist](frontend-boundary.md) when reproducing or locating the mismatch is difficult.
-- [ ] If that workflow is unavailable or a reasonable attempt does not reproduce the failure, reuse, adapt, or build the smallest faithful test that can expose the same failure in the real implementation. Use available evidence to preserve reachable inputs, state, and ordering; an impossible setup, copied implementation, or unrelated exception does not reproduce the reported bug. Reuse existing fixtures before building a harness, and do not repeat uninformative real-use attempts indefinitely.
+- [ ] If that workflow is unavailable or a reasonable attempt does not reproduce the failure, reuse a cheap existing check or make a small adaptation when it can faithfully expose the same failure in the real implementation. Preserve reachable inputs, state, ordering, and the failure signature. Otherwise record it as not yet reproduced and continue with available evidence in step 3; use that evidence to choose a targeted fallback test in step 4. Substantial new harness work belongs in step 5. Do not repeat uninformative real-use attempts indefinitely.
 - [ ] Classify the result: **FAIL** = the target failure; **PASS** = the relevant behavior exercised correctly; **UNRESOLVED** = setup or observation prevented a verdict. Another exception is not the same failure.
 - [ ] Separately record the reproduction evidence: **actual use**, **test only**, or **not yet reproduced**, with the conditions and observer/source. A test driving the representative application workflow can count as actual use; an isolated test or substituted integration boundary cannot establish that the full workflow failed. Preserve useful existing reproduction evidence instead of repeating it solely to satisfy the sequence.
 - [ ] Simplify the case if it is quick and preserves the failure signature. Keep the original scenario; defer building a new harness or extensive reduction until cheaper checks leave a question it can answer.
@@ -43,7 +49,7 @@ Check a box when you have its evidence. Mark an inapplicable item **N/A** with a
 ## 4. Focused experiments: what would distinguish the explanations?
 
 - [ ] State the most plausible explanation and, where ambiguous, a credible alternative. Do not invent a fixed number of hypotheses.
-- [ ] Before running a probe, write what observation would support or contradict the explanation. Choose the cheapest useful discriminating check: a trace, breakpoint, boundary assertion, comparison, or controlled input change.
+- [ ] Before running a probe, write what observation would support or contradict the explanation. Choose the cheapest useful discriminating check: a trace, breakpoint, boundary assertion, comparison, or controlled input change. When actual-use reproduction is unavailable or unsuccessful, a small faithful test against the real implementation can provide the fallback; use existing evidence and fixtures to preserve reachable inputs, state, ordering, and the target failure. Copied logic, impossible state, or an unrelated exception does not reproduce it. Defer substantial setup to step 5.
 - [ ] Execute the probe and record its result. Control relevant variables and restore experimental changes before an unrelated probe; instrumentation can change timing.
 
 For extended work, use a compact log:

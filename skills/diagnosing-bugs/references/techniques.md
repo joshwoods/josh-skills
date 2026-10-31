@@ -41,7 +41,7 @@ Where the intended behavior admits meaningful properties, use a reference implem
 
 ## Active incidents
 
-Prioritize authorized mitigation while preserving useful evidence. A rollback or workaround can restore service without establishing the causal explanation. Track mitigation and diagnosis separately, and continue the investigation within the requested scope.
+Assess ongoing harm and fragile evidence immediately. Capture what is practical, perform authorized mitigation without waiting for a fresh reproduction or complete diagnosis, and verify recovery in the affected workflow and population. Record remaining damaged state or queued effects that need recovery. A rollback or workaround can restore service without establishing the causal explanation or repairing prior damage. Track mitigation and diagnosis separately, and continue the investigation within the requested scope.
 
 For configuration-driven symptoms, use the [configuration and rollout guide](configuration-and-rollouts.md) to separate reports, identify decision origins and the actual producer, and trace exactly what rollback restores. Use available correlation evidence early; do not merge causes solely because reports look alike or share a trace.
 
