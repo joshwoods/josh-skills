@@ -38,6 +38,8 @@ Use supported entry points and isolated state. A mock can control a boundary, bu
 
 Capture the command or steps, relevant revision/configuration, input or action sequence, output, and assertion. Keep evidence proportional to the claim; do not expose unrelated data or produce a large artifact bundle for a simple counterexample.
 
+Preserve an available failing state before recommending or performing a reset or retry that may overwrite the failing state or evidence. Capture relevant evidence before volatile logs, session state, or installation identity change; use supported snapshots/exports or a separate fresh instance where feasible. A reset can remove the trigger or change inputs to server-side targeting without changing its rules. Record the action and before/after differences; a disappearance is an observation or mitigation, not a causal explanation or verified repair by itself. Do not delay urgent authorized recovery for exhaustive capture; record any evidence lost.
+
 Reduce a reproduction only while preserving the claimed failure. An exception from a different line, an impossible object state, or a replaced integration boundary may explain why the reduced case fails without validating the original concern.
 
 ## Bind evidence to the behavior tested

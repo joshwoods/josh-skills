@@ -28,7 +28,7 @@ Use supplied request/trace IDs through supported sources early. An empty result 
 
 For each potentially relevant exception, follow the catch/fallback/retry behavior to the disputed output. An error that is handled without changing that decision can be a separate problem; its presence in the same trace is not proof it caused this symptom.
 
-Inspect account/device targeting and explicit overrides alongside freshness when a report differs from broad recovery. Refreshing or reinstalling a client changes client state, not server-side targeting. A cache explanation needs a supported layer, key, lifetime, and invalidation path that accounts for the observation; do not choose it solely because the output looks stale.
+Inspect account/device targeting and explicit overrides alongside freshness when a report differs from broad recovery. Refreshing or reinstalling a client does not establish that server-side rules or overrides were removed; check whether the targeting identity or attributes changed. Preserve the failing state and available decision evidence [before resetting it](techniques.md#preserve-failing-state-before-resetting-it), then compare the effective identity, configuration, and result afterward. A cache explanation needs a supported layer, key, lifetime, and invalidation path that accounts for the observation; do not choose it solely because the output looks stale or a reset made it disappear.
 
 ## Trace what rollback actually reverses
 
