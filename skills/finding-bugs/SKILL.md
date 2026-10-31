@@ -19,8 +19,8 @@ For a reported failure or deeper diagnosis of a discovered defect, the [diagnosi
 
 Read additional references only when needed:
 
-- [Coverage](references/coverage.md): choosing meaningful boundaries, state sequences, and behavioral oracles across workflows.
-- [Validation](references/validation.md): ambiguous evidence, difficult runtime cases, mocks, ordering, or temporary test/instrumentation probes.
+- [Coverage](references/coverage.md): choosing meaningful boundaries, state sequences, and behavioral oracles; tracing replacements, skipped evaluation, shared eligibility rules, and actual consumers.
+- [Validation](references/validation.md): ambiguous evidence, review/history clues, consumer-level assertions, revision and scope limits, difficult runtime cases, or temporary probes.
 - [Provenance](references/provenance.md): source rationale, further study, or evaluating the skill itself.
 
 A dedicated security scan or product readiness audit needs its relevant workflow; this checklist can support correctness investigation without replacing that scope.

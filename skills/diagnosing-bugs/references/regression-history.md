@@ -1,6 +1,6 @@
 # Regression history: when did it stop working?
 
-Use this when behavior previously worked or reports cluster around a release. Compare the failing and working states while tracing the current failure. History narrows the explanation; a suspicious commit message does not establish a cause.
+Use this when behavior previously worked, reports cluster around a release, or prior changes and reviews can supply relevant clues. Compare the failing and working states while tracing the current failure. History narrows the explanation; a suspicious commit message does not establish a cause. A focused review-history search does not require known good/bad endpoints.
 
 **Effort order:** First try the ordinary reproduction and quick evidence checks. Collect version facts cheaply, then inspect a focused history summary or diff. Rebuilding old versions and bisecting come later when cheaper checks have not answered the question and the expected information justifies the setup. Skip unnecessary history work once you have enough evidence to repair and verify, unless the requested outcome also includes the introduction boundary or affected releases; complete those questions too.
 
@@ -35,6 +35,32 @@ git log -p "${regression_good}..${regression_bad}" -- path/to/relevant/code
 
 For focused searches, `git log -S 'fieldName' "${regression_good}..${regression_bad}"` finds changes to its occurrence count; `git log -G 'pattern' "${regression_good}..${regression_bad}"` searches matching added/removed lines. `git log --follow -p "$regression_bad" -- path/to/file` follows one file backward from the failing ref across renames. Keep these searches subordinate to the observed path. See [git-log](https://git-scm.com/docs/git-log).
 
+### Use reviews as investigative leads
+
+Read relevant prior changes, substantive review warnings, author replies, correction commits, and configuration history. Extract the invariant behind a warning and turn it into a prediction about the affected revision, configuration, and request. Use these clues to generate and prioritize hypotheses while investigating, not only to explain the result afterward. Keep the search focused on the mechanism; do not delay available runtime evidence to read every discussion.
+
+| Historical clue | What to check now |
+| --- | --- |
+| A reviewer identifies an unsafe replacement or a missing safeguard | Other reachable consumers that depend on the same invariant. |
+| A correction handles several named exceptions | Whether it restores the general invariant or leaves equivalent cases reachable. |
+| Behavior depends on another change | Whether that dependency actually deployed, in the required order and affected environment. |
+| Validation is deferred or pending | Whether later evidence closes that exact gap. Missing evidence means unverified, not proof that testing never occurred. |
+| A later change expands a previously reviewed abstraction | Which prior assumptions and checks still cover the newly affected consumers and populations. |
+| Approval predates consequential edits | The intervening diff and any later review or validation of the final behavior. |
+| Configuration history adds an override | Its recorded purpose, effective scope, and whether removal actually took effect. |
+| A thread is resolved, outdated, still open, or labeled fixed | The final code and downstream behavior. Thread metadata proves neither remediation nor persistence. |
+
+Keep a small clue record when useful, inline with the existing hypothesis log:
+
+```text
+Warning or assumption; original source and revision:
+Invariant at risk; recorded response/correction:
+Why it applies to the current scope; predicted failure:
+Check performed and result:
+```
+
+Distinguish an **explicit warning about the exact failure**, a **related warning about the mechanism**, and a **hindsight inference**. A related risk is a lead, not proof that someone anticipated and ignored this exact bug. Validate a newly exposed occurrence without reporting a corrected historical example as still defective. Preserve evidence lineage: reposts and summaries of one analysis are not independent confirmations. Record observed roles and actions separately from inferred intent or review depth.
+
 ## 3. Separate code from context
 
 - [ ] Rerun the same failure check on the proposed good and bad endpoints in comparable conditions. An old build failing against today's incompatible API or migrated database is not proof it was always broken. A checkout change must actually rebuild/relaunch the tested artifact, not leave a newer process or cached bundle running.
@@ -48,6 +74,8 @@ For focused searches, `git log -S 'fieldName' "${regression_good}..${regression_
 Hold relevant inputs, state, and check semantics constant. Reproduce each revision's recorded dependency/toolchain requirements when they are part of the change; record that difference rather than quietly substituting today's dependencies. Do not run old migration code against live data to fill the matrix.
 
 **Next:** A code-dependent result supports source-history investigation; a context-dependent result points toward data, flags, infrastructure, or dependencies. A combination may reveal an interaction. These are leads to test, not automatic diagnoses. Unavailable combinations remain unknown.
+
+For rollout or rollback comparisons, identify the actual branch and producer under each effective configuration; assigned cohorts and a switch's recorded state alone are insufficient. Follow [decision origins and rollback semantics](configuration-and-rollouts.md) when restored evaluation, overrides, or fallback can still produce the symptom. A pre-activation report or unaffected population challenges a rollout-only explanation and may need a separate causal account.
 
 ## 4. Narrow a large interval with bisect
 

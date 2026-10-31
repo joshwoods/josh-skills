@@ -16,7 +16,8 @@ Follow its low-to-high effort investigation order: quick triage and reproduction
 Read supporting material only when it helps the current task:
 
 - [Frontend boundaries](references/frontend-boundary.md): reproducing UI failures and distinguishing request defects, backend data/contract problems, and client handling errors.
-- [Regression history](references/regression-history.md): last-known-good versions, release-to-commit mapping, changed context, Git history, and bisect.
+- [Configuration and rollouts](references/configuration-and-rollouts.md): decision origins, defaults, actual serving paths, differing reports, and rollback behavior.
+- [Regression history](references/regression-history.md): last-known-good versions, review warnings and correction history as leads, release-to-commit mapping, changed context, and bisect.
 - [Techniques](references/techniques.md): intermittent failures, performance, history bisection, input reduction, UI/lifecycle behavior, incidents, and human-assisted reproduction.
 - [Sources](references/sources.md): provenance, further study, or evaluation of this method.
 - [Finding Bugs](../finding-bugs/SKILL.md), if available: proactive discovery and coverage of unknown defects.

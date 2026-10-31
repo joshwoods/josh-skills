@@ -32,6 +32,8 @@ Where the intended behavior admits meaningful properties, use a reference implem
 
 Prioritize authorized mitigation while preserving useful evidence. A rollback or workaround can restore service without establishing the causal explanation. Track mitigation and diagnosis separately, and continue the investigation within the requested scope.
 
+For configuration-driven symptoms, use the [configuration and rollout guide](configuration-and-rollouts.md) to separate reports, identify decision origins and the actual producer, and trace exactly what rollback restores. Use available correlation evidence early; do not merge causes solely because reports look alike or share a trace.
+
 ## Human-assisted reproduction
 
 When an indispensable interaction is unavailable to the agent, ask for the specific observation needed and continue independent investigation. The optional [interaction template](../scripts/hitl-loop.template.sh) can collect observations if the user has access to the interactive terminal running it. Adapt its example steps before use; its printed responses are observations to interpret, not an automated pass/fail verdict or a structured data protocol.

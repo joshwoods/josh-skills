@@ -27,6 +27,22 @@ These prompts are a menu. Include the dimensions that the implementation and tas
 
 Do not invent requirements such as idempotence, order independence, or lossless round trips. Apply a property only where the contract warrants it. A failed request might still have committed a remote effect; a canceled local task does not establish that the remote operation was canceled.
 
+## Replacements, eligibility, and actual consumers
+
+Use this section when a change substitutes a result, returns a default, skips evaluation, or gates a shared set of operations. Start with the affected path and cheap available evidence; expand only as required to establish its effective scope.
+
+- Trace the decision through each reachable downstream consumer to its output, further reads, and side effects. A control value, `false`, an empty value, `null`, and "not evaluated" are not inherently equivalent or safe. Determine what each consumer does with the actual state: it may perform another read, choose a different path, retain old state, or emit an effect. Judge the contract at that observation point.
+- For a registry, base class, or bulk rule, enumerate the actual affected implementations and inherited/indirect callers within scope. Check dispatch and framework dependency construction, including work that occurs before the gated method runs. Skipping evaluation need not prevent dependency creation or its effects. Names, annotations, registry labels, and other metadata guide the search; confirm the reachable call/dependency paths rather than treating metadata as a complete caller inventory.
+- Separate eligibility or cohort assignment from the path producing the response. Check routing overrides, fallback, and shadow execution where applicable. Record which result the consumer actually receives; a shadow result or an assigned-but-disabled branch does not establish behavior on the enabled response-producing path.
+
+Derive decision cases from the intended contract, not from the implementation's current branches. Include eligible and ineligible cases, unknown/missing inputs, and unaffected cases where those states are supported. Do not silently equate unknown with false or ineligible. Keep a compact decision record in existing notes when several branches matter:
+
+`case + contract → eligibility → actual route → evaluated/replaced/skipped result → consumer outcome + relevant reads/effects → evidence or unknown`
+
+This is a local reasoning aid, not a required universal form or production logging feature. Start with representative cases that distinguish the possibilities, then cover the remaining requested cases. Keep unknown fields unknown until evidence resolves them.
+
+Include a negative control where useful: an intentionally supported fallback can be correct even though it differs from the preferred path. Do not report fallback, a false value, or suppressed work as a defect without a reachable contract violation. Conversely, showing that evaluation was suppressed does not establish that downstream behavior remained correct.
+
 ## Choose an oracle and a method
 
 An oracle is the rule used to judge a result. It may come from an explicit example, API contract, established invariant, simple reference model, or relationship between operations. If the oracle merely repeats the implementation's formula, it may reproduce its mistake.

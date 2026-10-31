@@ -10,6 +10,7 @@ Check a box when you have its evidence. Mark an inapplicable item **N/A** with a
 
 - [ ] Write: **“When [trigger], I expected [behavior], but observed [result].”** Identify why the expectation is correct: a requirement, API contract, caller, or accepted example. Separate the report from what you have observed yourself.
 - [ ] Record the relevant build/version, configuration, input, state, and impact. Check that the code being inspected is the code actually running.
+- [ ] Keep materially different reports separate by time, request/account or device context, build, effective configuration, and observed result. Similar screenshots are a grouping hint, not proof of a shared cause; leave missing facts unknown.
 - [ ] If this previously worked, record readily available last-observed-good and first-observed-bad version facts and their evidence. Leave missing identities as unknown for now; do not begin rebuilding old releases before trying a simple reproduction. First detection is not necessarily introduction.
 - [ ] Establish the intended outcome from the task: diagnosis, mitigation, or a verified repair. A request to fix the problem includes carrying the repair through verification.
 
@@ -28,11 +29,13 @@ Check a box when you have its evidence. Mark an inapplicable item **N/A** with a
 
 ## 3. Cheap evidence: is there an obvious mismatch?
 
-- [ ] Read the relevant existing error/stack trace, console or network result, and targeted test output. Check straightforward mismatches in build, configuration, input, or state before adding instrumentation.
+- [ ] Read the relevant existing error/stack trace, console or network result, and targeted test output. Use supplied request/trace identifiers early through supported, authorized correlation sources. An empty spans lookup does not rule out trace-linked logs or other available evidence. Check straightforward mismatches in build, configuration, input, or state before adding instrumentation or asking for evidence already available.
 - [ ] Follow the small relevant input/state path far enough to identify the first supported mismatch. Start from the error, failed assertion, or incorrect value; expand tracing only when the evidence requires it.
+- [ ] For an exception in the same request, follow its handler to the disputed result before assigning causality. Correlation alone does not establish that the exception caused this symptom.
 - [ ] For frontend/API behavior, check the outbound request, raw response against the contract, client transformations/state, and rendered result. Distinguish incorrect backend data, valid-but-unexpected data, and incorrect client handling; more than one boundary can be defective.
+- [ ] When configuration, defaults, or gating affects the path, establish where the decision value came from and which implementation produced the result. Follow replacements through consumers, further lookups, and side effects; an assigned cohort is not proof of the executed path. Use the [configuration and rollout guide](configuration-and-rollouts.md), including for symptoms that persist after rollback.
 - [ ] Compare a working input, caller, configuration, or version where useful. Check guards and assumptions around suspicious code; a recent change or suspicious line is a lead, not proof.
-- [ ] For a regression, inspect a brief relevant history summary or diff and note changes in flags, dependencies, runtime, API/schema, or data. Use the early steps of the [history checklist](regression-history.md); reserve historical rebuilds and bisect for escalation.
+- [ ] Inspect a brief relevant history summary, review discussion, or correction when it can explain the symptom. Turn warnings, assumptions, and deferred checks into testable hypotheses for the affected revision, configuration, and request. For regressions, also note changes in flags, dependencies, runtime, API/schema, or data. Use the early steps of the [history checklist](regression-history.md); reserve historical rebuilds and bisect for escalation.
 
 **Keep:** A short path such as `trigger → caller → state change → incorrect result`, with evidence at the disputed boundary.
 
@@ -78,6 +81,7 @@ Actual cost depends on existing tooling; a ready-made decisive check can move ea
 
 - [ ] Exercise the original scenario and relevant reduced check after the change. If only a fallback test can run, verify against it and report test-level verification with the actual-use gap; retry the actual workflow when available. Do not claim end-to-end verification from an isolated test. For intermittent or performance failures, compare equivalent conditions and report trials or measurements and their limits.
 - [ ] Check risk-relevant neighboring behavior and complete required project checks. Use runtime evidence for claims about actual UI interaction or end-to-end behavior.
+- [ ] Bind reused validation to its code/configuration revisions, effective scope, population, executed branch, and consumer assertion where relevant. A disabled-path or shadow-only run does not verify the enabled serving path. Refresh affected evidence when those conditions change; retain unaffected checks.
 - [ ] Where existing state was affected, verify recovery from that state as well as behavior with fresh state. A passing clean install does not establish that existing users have recovered.
 - [ ] Verify final conditions with temporary instrumentation removed wherever removal can change behavior, especially timing.
 
@@ -86,7 +90,7 @@ Actual cost depends on existing tooling; a ready-made decisive check can move ea
 ## 8. What can we honestly conclude?
 
 - [ ] Remove only temporary experiments and inspect the retained diff, including after diagnosis-only work. Preserve intended repairs and unrelated user changes.
-- [ ] Record the outcome: **diagnosed**, **repaired and verified**, **mitigated**, or **unresolved / repair not fully verified**. Include the cause, retained change, actual checks, and material uncertainty.
-- [ ] If this bug belongs to a larger hunt, return to its remaining coverage. Search nearby code for the same mechanism when useful, and validate each match before calling it another defect.
+- [ ] Record the outcome: **diagnosed**, **repaired and verified**, **mitigated**, or **unresolved / repair not fully verified**. Include the cause, retained change, actual checks, and material uncertainty. Preserve original evidence and attribution; summaries or reposts of the same conclusion are not independent corroboration.
+- [ ] If this bug belongs to a larger hunt, return to its remaining coverage. Use the violated invariant to inspect equivalent reachable cases within scope; fixing named examples does not establish that the remaining set is safe. Validate each match before calling it another defect.
 
 For specialized techniques, consult the relevant section of [techniques.md](techniques.md). For method sources and limitations, see [sources.md](sources.md). Neither a checked checklist nor a green build proves that every bug is gone.

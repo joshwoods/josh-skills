@@ -22,7 +22,8 @@ Checklists and a decision flow for humans and LLMs to find, explain, and fix sof
 | [Diagnose and fix a bug](skills/diagnosing-bugs/references/checklist.md) | Something is broken, wrong, throwing, or slower than expected. |
 | [Find bugs in a codebase or workflow](skills/finding-bugs/references/checklist.md) | You want to discover defects that have not been reported. |
 | [Reproduce a frontend bug and locate the data mismatch](skills/diagnosing-bugs/references/frontend-boundary.md) | The UI is wrong and you need to distinguish request, backend-data, and client-handling problems. |
-| [Trace a regression through versions and Git history](skills/diagnosing-bugs/references/regression-history.md) | Something used to work and you want to narrow when and how it changed, including with Git bisect. |
+| [Trace a regression through versions and review history](skills/diagnosing-bugs/references/regression-history.md) | Prior changes or review warnings may explain a failure, or you need to narrow its introduction with Git history and bisect. |
+| [Diagnose configuration decisions and rollouts](skills/diagnosing-bugs/references/configuration-and-rollouts.md) | Defaults, overrides, migration routing, or rollback may explain differing reports or consumer-visible behavior. |
 
 Start at the first unanswered question. Check boxes against actual evidence; mark inapplicable or blocked items explicitly. A small bug may need one experiment. A broader hunt needs a coverage record so finding one bug does not silently end the rest of the work.
 
