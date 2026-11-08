@@ -1,6 +1,6 @@
 # Josh’s Skills
 
-Reusable skills for bug investigation and evidence-backed research, with local references for use by humans and LLMs.
+Reusable skills for bug investigation, Apple error lookup, and evidence-backed research, with local references for use by humans and LLMs.
 
 ## Skills
 
@@ -8,6 +8,7 @@ Reusable skills for bug investigation and evidence-backed research, with local r
 | --- | --- |
 | [Diagnosing Bugs](skills/diagnosing-bugs/SKILL.md) | Diagnose reported failures and carry requested repairs through verification. |
 | [Finding Bugs](skills/finding-bugs/SKILL.md) | Discover correctness defects through source inspection and representative workflow use. |
+| [Apple Error Lookup](skills/osstatus-local/SKILL.md) | Explain iOS/macOS error logs and investigate failing Apple API calls using an offline OSStatus catalog. |
 | [Heavy-Duty Research](skills/heavy-duty-research/SKILL.md) | Detailed research workflow with source evaluation, synthesis, and a pack of research-method references. |
 | [Heavy-Duty Research Lean](skills/heavy-duty-research-lean/SKILL.md) | A more compact research workflow with conditional loading of a consolidated methodology checklist. |
 
@@ -95,20 +96,49 @@ git clone https://github.com/joshwoods/josh-skills.git
 cd josh-skills
 ```
 
-Copy the skill folders you want into your Codex skills directory. Back up any existing copies before replacing them. To install all four:
+Copy the skill folders you want into your Codex skills directory. Back up any existing copies before replacing them. To install all five:
 
 ```sh
 skill_destination="${CODEX_HOME:-$HOME/.codex}/skills"
 mkdir -p "$skill_destination"
-cp -R skills/diagnosing-bugs skills/finding-bugs skills/heavy-duty-research skills/heavy-duty-research-lean "$skill_destination/"
+cp -R skills/diagnosing-bugs skills/finding-bugs skills/osstatus-local skills/heavy-duty-research skills/heavy-duty-research-lean "$skill_destination/"
 ```
 
 In a new session, invoke the skill by name. For example:
 
 - “Use $diagnosing-bugs to investigate and fix this crash: …”
 - “Use $finding-bugs to review the import workflow for correctness defects.”
+- “Use $osstatus-local to explain this iOS error and investigate the failing call: …”
 - “Use $heavy-duty-research to investigate this question and produce an evidence-backed brief: …”
 - “Use $heavy-duty-research-lean to compare these options, including source quality and uncertainties: …”
+
+## Apple error lookup
+
+`osstatus-local` supports ordinary requests such as “I'm running into this error,
+what does it mean?” or “Can you help debug this error happening in iOS?” when an
+Apple error is supplied. Include the actual log or code and the API that failed.
+The skill extracts the code, queries candidates, and uses the caller to interpret
+them; a catalog match alone does not establish the cause of the bug.
+
+The bundled SQLite snapshot contains 6,453 records across 143 frameworks, captured
+from [OSStatus.com](https://www.osstatus.com/) by Araelium on November 8, 2026.
+The source advertises a July 2024 update. Most records lack descriptions; two
+inconsistent source records are preserved with warnings. See
+[catalog provenance and limitations](skills/osstatus-local/references/catalog.md).
+
+Queries need Python 3.10+ and only its standard library, with no network access:
+
+```sh
+python3 skills/osstatus-local/scripts/osstatus.py -25300 --json
+python3 skills/osstatus-local/scripts/osstatus.py "'fmt?'" --json
+python3 skills/osstatus-local/scripts/osstatus.py --framework Security --all --full-json
+python3 -m unittest discover -s tests/osstatus-local -v
+```
+
+`--json` returns concise structured matches; `--full-json` includes original field
+mappings and all provenance metadata. Use `--all` when every matching record is
+needed. Refresh is explicit: `python3 skills/osstatus-local/scripts/refresh.py`.
+The raw capture and repeatable importer are included.
 
 ## Use with other agents
 

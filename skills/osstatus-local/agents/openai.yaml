@@ -1,0 +1,4 @@
+interface:
+  display_name: "Apple Error Lookup"
+  short_description: "Explain Apple error codes while debugging iOS/macOS"
+  default_prompt: "Use $osstatus-local to explain this iOS/macOS error and help investigate the failing API call."
