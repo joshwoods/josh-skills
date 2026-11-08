@@ -4,14 +4,7 @@ Read the relevant section when the investigation needs a more specific approach.
 
 ## Preserve failing state before resetting it
 
-A currently failing instance may be the only reproduction available. Before recommending or performing refresh, restart, reinstall, sign-out, cache clearing, data reset, or a retry that may overwrite the failing state or evidence, preserve as much relevant evidence as is safely available:
-
-- Record the visible or consumer-observed failure, exact action order and inputs, timestamps, request/trace IDs, and matching responses or errors. Save existing logs before they rotate or disappear.
-- Record build/environment, effective configuration and overrides, account/session/device or installation identity, and relevant persisted, cached, or in-process state. Prefer supported exports or snapshots when feasible; capture evidence without exposing credentials or unrelated personal data.
-- Keep the failing instance intact when safe and practical. Use a copy, snapshot, or separate fresh instance to test a clean start instead of destroying the only failing state. Note any properties the copy cannot preserve, such as timing or live connections.
-- Record the reset performed and compare the result, identity, configuration, and state before and after. A reset can erase the trigger or change targeting inputs; disappearance of the symptom alone neither establishes a cache cause nor verifies a repair.
-
-Keep capture proportional to the risk of losing the reproduction; do not require an exhaustive dump or new logging infrastructure. During urgent authorized mitigation, collect what is practical without delaying necessary recovery, then state what changed and what evidence could not be retained. If state was already reset, use remaining evidence and disclose the lost reproduction rather than claiming it never occurred.
+Before a reset or retry can overwrite the failure, follow the [local evidence-preservation procedure](evidence.md#preserve-failing-state-before-resetting-it). Keep the failing instance or a safe snapshot where feasible and compare with a separate fresh instance. Capture what urgent mitigation permits; disappearance after reset does not establish a cause or verified repair.
 
 ## Intermittent, timing and concurrency failures
 

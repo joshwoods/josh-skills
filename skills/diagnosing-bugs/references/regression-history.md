@@ -1,8 +1,12 @@
+<!-- Generated from .bug-workflows/references/regression-history.md. Edit that source and run .bug-workflows/sync.py. This local copy is self-contained at runtime. -->
+
 # Regression history: when did it stop working?
 
 Use this when behavior previously worked, reports cluster around a release, or prior changes and reviews can supply relevant clues. Compare the failing and working states while tracing the current failure. History narrows the explanation; a suspicious commit message does not establish a cause. A focused review-history search does not require known good/bad endpoints.
 
 **Effort order:** First try the ordinary reproduction and quick evidence checks. Collect version facts cheaply, then inspect a focused history summary or diff. Rebuilding old versions and bisecting come later when cheaper checks have not answered the question and the expected information justifies the setup. Skip unnecessary history work once you have enough evidence to repair and verify, unless the requested outcome also includes the introduction boundary or affected releases; complete those questions too.
+
+Reuse the caller's existing symptom, expected behavior, reproduction, endpoint evidence, and unresolved hypotheses; start at the first unanswered question. Preserve an available failing state [before resetting it](evidence.md#preserve-failing-state-before-resetting-it). Keep the [evidence distinctions](evidence.md#separate-result-evidence-and-conclusion) when comparing versions.
 
 ## 1. Establish the interval
 
@@ -37,29 +41,7 @@ For focused searches, `git log -S 'fieldName' "${regression_good}..${regression_
 
 ### Use reviews as investigative leads
 
-Read relevant prior changes, substantive review warnings, author replies, correction commits, and configuration history. Extract the invariant behind a warning and turn it into a prediction about the affected revision, configuration, and request. Use these clues to generate and prioritize hypotheses while investigating, not only to explain the result afterward. Keep the search focused on the mechanism; do not delay available runtime evidence to read every discussion.
-
-| Historical clue | What to check now |
-| --- | --- |
-| A reviewer identifies an unsafe replacement or a missing safeguard | Other reachable consumers that depend on the same invariant. |
-| A correction handles several named exceptions | Whether it restores the general invariant or leaves equivalent cases reachable. |
-| Behavior depends on another change | Whether that dependency actually deployed, in the required order and affected environment. |
-| Validation is deferred or pending | Whether later evidence closes that exact gap. Missing evidence means unverified, not proof that testing never occurred. |
-| A later change expands a previously reviewed abstraction | Which prior assumptions and checks still cover the newly affected consumers and populations. |
-| Approval predates consequential edits | The intervening diff and any later review or validation of the final behavior. |
-| Configuration history adds an override | Its recorded purpose, effective scope, and whether removal actually took effect. |
-| A thread is resolved, outdated, still open, or labeled fixed | The final code and downstream behavior. Thread metadata proves neither remediation nor persistence. |
-
-Keep a small clue record when useful, inline with the existing hypothesis log:
-
-```text
-Warning or assumption; original source and revision:
-Invariant at risk; recorded response/correction:
-Why it applies to the current scope; predicted failure:
-Check performed and result:
-```
-
-Distinguish an **explicit warning about the exact failure**, a **related warning about the mechanism**, and a **hindsight inference**. A related risk is a lead, not proof that someone anticipated and ignored this exact bug. Validate a newly exposed occurrence without reporting a corrected historical example as still defective. Preserve evidence lineage: reposts and summaries of one analysis are not independent confirmations. Record observed roles and actions separately from inferred intent or review depth.
+Use the [review and correction guidance](review-history.md) to turn warnings, prior fixes, dependencies, scope changes, and pending validation into hypotheses for the current revision. Preserve the difference between explicit predictions, related concerns, and hindsight. Keep a clue record only when it resolves consequential ambiguity; thread metadata and repeated summaries do not establish a cause or independent confirmation.
 
 ## 3. Separate code from context
 
@@ -75,7 +57,7 @@ Hold relevant inputs, state, and check semantics constant. Reproduce each revisi
 
 **Next:** A code-dependent result supports source-history investigation; a context-dependent result points toward data, flags, infrastructure, or dependencies. A combination may reveal an interaction. These are leads to test, not automatic diagnoses. Unavailable combinations remain unknown.
 
-For rollout or rollback comparisons, identify the actual branch and producer under each effective configuration; assigned cohorts and a switch's recorded state alone are insufficient. Follow [decision origins and rollback semantics](configuration-and-rollouts.md) when restored evaluation, overrides, or fallback can still produce the symptom. A pre-activation report or unaffected population challenges a rollout-only explanation and may need a separate causal account.
+For rollout or rollback comparisons, identify the actual branch and producer under each effective configuration; assigned cohorts and a switch's recorded state alone are insufficient. Trace what switch-off actually restores: it may resume ordinary evaluation while explicit overrides, fallback, or retained state still produce the symptom. For deeper investigation, use the [configuration and rollout guide](../../diagnosing-bugs/references/configuration-and-rollouts.md) if diagnosing-bugs is installed. A pre-activation report or unaffected population challenges a rollout-only explanation and may need a separate causal account.
 
 ## 4. Narrow a large interval with bisect
 
@@ -110,4 +92,6 @@ For automation, supply a task-specific classifier outside the bisected tree: `gi
 - [ ] Map the supported boundary back to released/deployed artifacts. Report the first affected release only when release/deployment evidence supports it; a source commit or first error timestamp alone cannot establish that mapping.
 - [ ] Preserve endpoint evidence, verdict log, skipped revisions, candidate SHA/range, environment limits, and causal explanation. Exit bisect, retain useful evidence outside its checkout, and clean up the disposable checkout without discarding user work.
 
-Return to the [main checklist](checklist.md) to repair and verify the original workflow. Finding the introducing change is localization, not completion of the repair.
+Return the supported boundary or candidate range, endpoint evidence, mechanism, affected releases where established, and remaining uncertainty to the caller's existing notes. Distinguish code introduction, activation/context changes, and first detection. If the boundary is unresolved, name the missing premise and next decisive check rather than inventing an exact commit or release.
+
+Resume the caller's remaining repair or coverage work, or the [local skill workflow](../SKILL.md) for a direct request. A history-only request can finish with this result; finding the introducing change does not finish a requested repair. Preserve existing evidence and authorization instead of starting the parent investigation again.

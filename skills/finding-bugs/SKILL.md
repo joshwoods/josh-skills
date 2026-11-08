@@ -19,8 +19,11 @@ For a reported failure or deeper diagnosis of a discovered defect, the [diagnosi
 
 Read additional references only when needed:
 
+- [Evidence](references/evidence.md): preserving failures, faithful reproduction, evidence labels, and the conditions a check establishes.
+- [Review and history clues](references/review-history.md): testing the applicability of warnings, corrections, and unfinished validation.
 - [Coverage](references/coverage.md): choosing meaningful boundaries, state sequences, and behavioral oracles; tracing replacements, skipped evaluation, shared eligibility rules, and actual consumers.
 - [Validation](references/validation.md): ambiguous evidence, review/history clues, consumer-level assertions, revision and scope limits, difficult runtime cases, or temporary probes.
 - [Provenance](references/provenance.md): source rationale, further study, or evaluating the skill itself.
+- [Investigating Regressions](../investigating-regressions/SKILL.md), if installed: locating a candidate regression's introduction boundary or affected releases when that question matters. Pass existing evidence and retain the coverage map; bring the result back to the hunt. Focused review/history checks and the local repair path do not require this sibling.
 
 A dedicated security scan or product readiness audit needs its relevant workflow; this checklist can support correctness investigation without replacing that scope.

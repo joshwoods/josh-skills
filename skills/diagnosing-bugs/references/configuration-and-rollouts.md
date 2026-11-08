@@ -32,7 +32,7 @@ Prefer the affected actual workflow for evidence. If it is unavailable, a faithf
 
 For each potentially relevant exception, follow the catch/fallback/retry behavior to the disputed output. An error that is handled without changing that decision can be a separate problem; its presence in the same trace is not proof it caused this symptom.
 
-Inspect account/device targeting and explicit overrides alongside freshness when a report differs from broad recovery. Refreshing or reinstalling a client does not establish that server-side rules or overrides were removed; check whether the targeting identity or attributes changed. Preserve the failing state and available decision evidence [before resetting it](techniques.md#preserve-failing-state-before-resetting-it), then compare the effective identity, configuration, and result afterward. A cache explanation needs a supported layer, key, lifetime, and invalidation path that accounts for the observation; do not choose it solely because the output looks stale or a reset made it disappear.
+Inspect account/device targeting and explicit overrides alongside freshness when a report differs from broad recovery. Refreshing or reinstalling a client does not establish that server-side rules or overrides were removed; check whether the targeting identity or attributes changed. Preserve the failing state and available decision evidence [before resetting it](evidence.md#preserve-failing-state-before-resetting-it), then compare the effective identity, configuration, and result afterward. A cache explanation needs a supported layer, key, lifetime, and invalidation path that accounts for the observation; do not choose it solely because the output looks stale or a reset made it disappear.
 
 ## Trace what rollback actually reverses
 
@@ -42,7 +42,7 @@ Verify recovery for the affected population and workflow, separately from explai
 
 ## Keep validation attached to the conditions it exercised
 
-Record the code and configuration revisions, effective scope, population, executed branch, actual producer, and consumer assertion needed to interpret a check. Gate-off results do not establish gate-on behavior; a shadow path does not establish the serving result. Broader targeting or a newly affected consumer requires reassessing the corresponding evidence, without repeating unrelated checks.
+Apply the [shared evidence limits](evidence.md#bind-evidence-to-its-conditions), including the actual producer and consumer assertion. Gate-off results do not establish gate-on behavior; a shadow path does not establish the serving result. Reassess affected evidence when targeting or consumers expand, without repeating unrelated checks.
 
 For a relevant investigation, an inline decision record is sufficient; combine it with existing notes rather than maintaining a second report:
 
@@ -59,4 +59,4 @@ Validation: actual workflow / isolated test / static
 
 Omit irrelevant fields for simple bugs and leave unavailable facts unknown. Do not add product logging merely to fill this record. Choose additional instrumentation only when it can answer a necessary unresolved question.
 
-Distinguish original observations from summaries, reposts, and quoted assistant conclusions. Multiple copies of one conclusion remain one evidence lineage. If explaining change history, separate configuration ownership, recorded change actors, authors, reviewers, and mergers; those roles and empty approval text do not establish intent or review depth. Use [review and correction history](regression-history.md#use-reviews-as-investigative-leads) for source-backed hypotheses, not unsupported blame.
+Use the [review and correction guidance](review-history.md) for source-backed hypotheses and attribution. Multiple copies of one conclusion remain one evidence lineage; recorded ownership or approval does not establish intent or review depth.

@@ -15,9 +15,12 @@ After time-sensitive actions, follow its low-to-high effort investigation order:
 
 Read supporting material only when it helps the current task:
 
+- [Evidence](references/evidence.md): preserving a failing state, faithful reproduction, evidence labels, and the conditions a check establishes.
+- [Review and history clues](references/review-history.md): using warnings and corrections as hypotheses without overstating applicability or attribution.
 - [Frontend boundaries](references/frontend-boundary.md): reproducing UI failures and distinguishing request defects, backend data/contract problems, and client handling errors.
 - [Configuration and rollouts](references/configuration-and-rollouts.md): decision origins, defaults, actual serving paths, differing reports, and rollback behavior.
 - [Regression history](references/regression-history.md): last-known-good versions, review warnings and correction history as leads, release-to-commit mapping, changed context, and bisect.
+- [Investigating Regressions](../investigating-regressions/SKILL.md), if installed: a specialist entrypoint for locating the introduction boundary or affected releases. Pass existing evidence and the unanswered question, then resume this workflow's requested repair; the local history reference provides the same procedure without that sibling.
 - [Techniques](references/techniques.md): intermittent failures, performance, history bisection, input reduction, UI/lifecycle behavior, incidents, and human-assisted reproduction.
 - [Sources](references/sources.md): provenance, further study, or evaluation of this method.
 - [Finding Bugs](../finding-bugs/SKILL.md), if available: proactive discovery and coverage of unknown defects.

@@ -8,6 +8,7 @@ Reusable skills for bug investigation, Apple error lookup, and evidence-backed r
 | --- | --- |
 | [Diagnosing Bugs](skills/diagnosing-bugs/SKILL.md) | Diagnose reported failures and carry requested repairs through verification. |
 | [Finding Bugs](skills/finding-bugs/SKILL.md) | Discover correctness defects through source inspection and representative workflow use. |
+| [Investigating Regressions](skills/investigating-regressions/SKILL.md) | Locate supported regression introduction boundaries and affected releases using version evidence, history, and bisect. |
 | [Apple Error Lookup](skills/osstatus-local/SKILL.md) | Explain iOS/macOS error logs and investigate failing Apple API calls using an offline OSStatus catalog. |
 | [Heavy-Duty Research](skills/heavy-duty-research/SKILL.md) | Detailed research workflow with source evaluation, synthesis, and a pack of research-method references. |
 | [Heavy-Duty Research Lean](skills/heavy-duty-research-lean/SKILL.md) | A more compact research workflow with conditional loading of a consolidated methodology checklist. |
@@ -23,7 +24,7 @@ Checklists and a decision flow for humans and LLMs to find, explain, and fix sof
 | [Diagnose and fix a bug](skills/diagnosing-bugs/references/checklist.md) | Something is broken, wrong, throwing, or slower than expected. |
 | [Find bugs in a codebase or workflow](skills/finding-bugs/references/checklist.md) | You want to discover defects that have not been reported. |
 | [Reproduce a frontend bug and locate the data mismatch](skills/diagnosing-bugs/references/frontend-boundary.md) | The UI is wrong and you need to distinguish request, backend-data, and client-handling problems. |
-| [Trace a regression through versions and review history](skills/diagnosing-bugs/references/regression-history.md) | Prior changes or review warnings may explain a failure, or you need to narrow its introduction with Git history and bisect. |
+| [Trace a regression through versions and review history](skills/investigating-regressions/references/regression-history.md) | Prior changes or review warnings may explain a failure, or you need to narrow its introduction with Git history and bisect. |
 | [Diagnose configuration decisions and rollouts](skills/diagnosing-bugs/references/configuration-and-rollouts.md) | Defaults, overrides, migration routing, or rollback may explain differing reports or consumer-visible behavior. |
 
 Handle ongoing harm and fragile evidence first: preserve what is practical before state-changing actions, perform authorized urgent mitigation when needed, and verify recovery. Then start at the first unanswered question. Check boxes against actual evidence; mark inapplicable or blocked items explicitly. A small bug may need one experiment. A broader hunt needs a coverage record so finding one bug does not silently end the rest of the work.
@@ -96,18 +97,19 @@ git clone https://github.com/joshwoods/josh-skills.git
 cd josh-skills
 ```
 
-Copy the skill folders you want into your Codex skills directory. Back up any existing copies before replacing them. To install all five:
+Copy the skill folders you want into your Codex skills directory. Back up any existing copies before replacing them. To install all six:
 
 ```sh
 skill_destination="${CODEX_HOME:-$HOME/.codex}/skills"
 mkdir -p "$skill_destination"
-cp -R skills/diagnosing-bugs skills/finding-bugs skills/osstatus-local skills/heavy-duty-research skills/heavy-duty-research-lean "$skill_destination/"
+cp -R skills/diagnosing-bugs skills/finding-bugs skills/investigating-regressions skills/osstatus-local skills/heavy-duty-research skills/heavy-duty-research-lean "$skill_destination/"
 ```
 
 In a new session, invoke the skill by name. For example:
 
 - “Use $diagnosing-bugs to investigate and fix this crash: …”
 - “Use $finding-bugs to review the import workflow for correctness defects.”
+- “Use $investigating-regressions to find when this failure was introduced and which releases are affected.”
 - “Use $osstatus-local to explain this iOS error and investigate the failing call: …”
 - “Use $heavy-duty-research to investigate this question and produce an evidence-backed brief: …”
 - “Use $heavy-duty-research-lean to compare these options, including source quality and uncertainties: …”
@@ -142,7 +144,20 @@ The raw capture and repeatable importer are included.
 
 ## Use with other agents
 
-Copy the complete folders into the agent’s supported skill location, or provide the relevant `SKILL.md` and its linked references as task context. If installing both bug skills, keep them as siblings so their optional cross-references work. Adapt installation to the receiving tool; the methods do not require a particular model.
+Copy the complete folders into the agent’s supported skill location, or provide the relevant `SKILL.md` and its linked references as task context. If installing multiple bug skills, keep them as siblings so their optional cross-references work. Adapt installation to the receiving tool; the methods do not require a particular model.
+
+## Maintaining shared bug references
+
+The bug skills contain complete local references and remain independently installable. Shared evidence, review-history, and regression-history guidance is maintained in [skills/.bug-workflows/references](skills/.bug-workflows/references) and copied into the applicable skills. The hidden authoring folder is needed only for maintenance, not to use an installed skill.
+
+After editing the shared source, update its local copies and check for drift:
+
+```sh
+python3 skills/.bug-workflows/sync.py
+python3 skills/.bug-workflows/sync.py --check
+```
+
+Keep scope, repair authorization, and completion rules in each parent workflow. A specialist investigation returns its evidence to the parent so a requested repair or remaining discovery coverage continues.
 
 ## Sources and validation
 

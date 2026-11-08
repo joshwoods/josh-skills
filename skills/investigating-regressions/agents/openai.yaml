@@ -1,0 +1,3 @@
+interface:
+  display_name: "Investigating Regressions"
+  short_description: "Locate regression boundaries and affected releases"
